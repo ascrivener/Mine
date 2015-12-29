@@ -1,6 +1,7 @@
+import java.util.*;
 public class Driver{
 	public static void main(String [] args){
-		Game game = new Game(10,2);
+		Game game = new Game(10,10);
 
 		while(true){
 			game.display();

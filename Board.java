@@ -30,12 +30,48 @@ public class Board{
 		for (int i = 0; i < board_size; i++){
 			for (int j = 0; j < board_size; j++){
 				int adjacent_bomb_count = 0;
-				for (Tile tile : getAdjacentTiles(tiles[i][j])){
-					if (tile.inBounds(board_size) && tile.isBomb)
+				ArrayList<Tile> adjacent_list = getAdjacentTiles(tiles[i][j]);
+				for (Tile tile : adjacent_list){
+					if (tile.isBomb)
 						adjacent_bomb_count++;
 				}
+				tiles[i][j].config_list = getConfigurations(adjacent_list,adjacent_bomb_count);
 				tiles[i][j].adjacent_bomb_count = adjacent_bomb_count;
 			}
+		}
+	}
+
+	public ArrayList<HashSet<Tile>> getConfigurations(ArrayList<Tile> adjacent_list,
+														int adjacent_bomb_count){
+		if (adjacent_bomb_count==0)
+			return new ArrayList<HashSet<Tile>>();
+		else if (adjacent_bomb_count==adjacent_list.size()){
+			HashSet<Tile> h = new HashSet<Tile>(new ArrayList<Tile>(adjacent_list));
+			ArrayList<HashSet<Tile>> output = new ArrayList<HashSet<Tile>>();
+			output.add(h);
+			return output;
+		}
+		else{
+			Tile firstTile = adjacent_list.remove(0);
+			ArrayList<Tile> copy = new ArrayList<Tile>(adjacent_list);
+			ArrayList<HashSet<Tile>> bigList = getConfigurations(adjacent_list,adjacent_bomb_count);
+			ArrayList<HashSet<Tile>> smallList = getConfigurations(copy,adjacent_bomb_count-1);
+
+			if (smallList.isEmpty()){
+				HashSet<Tile> h = new HashSet<Tile>();
+				h.add(firstTile);
+				smallList.add(h);
+			}
+			else{
+				for (HashSet<Tile> h : smallList){
+					h.add(firstTile);
+				}
+			}
+
+			ArrayList<HashSet<Tile>> newList = new ArrayList<HashSet<Tile>>(bigList);
+			newList.addAll(smallList);
+
+			return newList;
 		}
 	}
 
