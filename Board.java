@@ -41,8 +41,7 @@ public class Board{
 		}
 	}
 
-	public ArrayList<HashSet<Tile>> getConfigurations(ArrayList<Tile> adjacent_list,
-														int adjacent_bomb_count){
+	public ArrayList<HashSet<Tile>> getConfigurations(ArrayList<Tile> adjacent_list,int adjacent_bomb_count){
 		if (adjacent_bomb_count==0)
 			return new ArrayList<HashSet<Tile>>();
 		else if (adjacent_bomb_count==adjacent_list.size()){
@@ -100,6 +99,31 @@ public class Board{
 		}
 
 		return adjacent_list;
+	}
+
+	public HashSet<Tile> getKnownBombs(Tile t){
+		if (t.config_list.size() == 0)
+			return new HashSet<Tile>();
+		else{
+			s = t.config_list.get(0);
+			for (HashSet<Tile> h : t.config_list){
+				s.retainAll(h);
+			}
+		}
+		return s;
+	}
+
+	public HashSet<Tile> getKnownFree(Tile t){
+		HashSet<Tile> adjacent_tiles = new HashSet<Tile>(getAdjacentTiles(t));
+		if (t.config_list.size() == 0)
+			return adjacent_tiles;
+		else{
+			s = t.config_list.get(0);
+			for (HashSet<Tile> h : t.config_list){
+				s.addAll(h);
+			}
+		}
+		return adjacent_tiles.removeAll(s);
 	}
 
 	public void display(){

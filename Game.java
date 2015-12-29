@@ -47,6 +47,31 @@ public class Game{
 		}
 	}
 
+	public HashSet<Tile> getKnownBombs(ArrayList<HashSet<Tile>> config_list){
+		if (config_list.size() == 0)
+			return new HashSet<Tile>();
+		else{
+			s = config_list.get(0);
+			for (HashSet<Tile> h : config_list){
+				s.retainAll(h);
+			}
+		}
+		return s;
+	}
+
+	public HashSet<Tile> getKnownFree(ArrayList<HashSet<Tile>> config_list,Tile t){
+		HashSet<Tile> adjacent_tiles = new HashSet<Tile>(board.getAdjacentTiles(t));
+		if (config_list.size() == 0)
+			return adjacent_tiles;
+		else{
+			s = config_list.get(0);
+			for (HashSet<Tile> h : config_list){
+				s.addAll(h);
+			}
+		}
+		return adjacent_tiles.removeAll(s);
+	}
+
 	public boolean finished(){
 		return Math.pow(board.board_size,2)-board.flipped_count == board.bomb_count;
 	}

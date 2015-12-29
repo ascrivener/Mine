@@ -5,14 +5,14 @@ public class Tile{
 	public boolean isFlipped;
 	public int adjacent_bomb_count;
 	public Location location;
-	public ArrayList<HashSet<Tile>> config_list = new ArrayList<HashSet<Tile>>();
+	public ArrayList<HashSet<Tile>> config_list;
 
 	public Tile(boolean isBomb,boolean isFlipped,int adjacent_bomb_count, Location location){
 		this.isBomb = isBomb;
 		this.isFlipped = isFlipped;
 		this.adjacent_bomb_count = adjacent_bomb_count;
 		this.location = location;
-
+		config_list = new ArrayList<HashSet<Tile>>();
 
 	}
 
