@@ -5,10 +5,12 @@ public class Driver{
 
 		while(true){
 			game.display();
+			game.displayKnown();
 			if (!game.makeMove(game.getMove()))
 				break;
 			if (game.finished()){
 				game.display();
+				game.displayKnown();
 				System.out.println("You win!");
 				break;
 			}
