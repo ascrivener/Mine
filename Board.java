@@ -12,7 +12,7 @@ public class Board{
 
 		for (int i =0; i < board_size; i++){
 			for (int j = 0; j < board_size; j++){
-				tiles[i][j] = new Tile(false,false,0,new Location(i,j));
+				tiles[i][j] = new Tile(false,false,0,new Location(i,j),getAdjacentTiles(new Location(i,j)));
 			}
 		}
 
@@ -30,12 +30,11 @@ public class Board{
 		for (int i = 0; i < board_size; i++){
 			for (int j = 0; j < board_size; j++){
 				int adjacent_bomb_count = 0;
-				ArrayList<Tile> adjacent_list = getAdjacentTiles(tiles[i][j]);
-				for (Tile tile : adjacent_list){
+				for (Tile tile : tiles[i][j].adjacency_list){
 					if (tile.isBomb)
 						adjacent_bomb_count++;
 				}
-				tiles[i][j].config_list = getConfigurations(adjacent_list,adjacent_bomb_count);
+				tiles[i][j].config_list = getConfigurations(tiles[i][j].adjacency_list,adjacent_bomb_count);
 				tiles[i][j].adjacent_bomb_count = adjacent_bomb_count;
 			}
 		}
@@ -74,8 +73,7 @@ public class Board{
 		}
 	}
 
-	public ArrayList<Tile> getAdjacentTiles(Tile tile){
-		Location location = tile.location;
+	public ArrayList<Tile> getAdjacentTiles(Location location){
 		int row = location.row;
 		int col = location.col;
 
@@ -99,31 +97,6 @@ public class Board{
 		}
 
 		return adjacent_list;
-	}
-
-	public HashSet<Tile> getKnownBombs(Tile t){
-		if (t.config_list.size() == 0)
-			return new HashSet<Tile>();
-		else{
-			s = t.config_list.get(0);
-			for (HashSet<Tile> h : t.config_list){
-				s.retainAll(h);
-			}
-		}
-		return s;
-	}
-
-	public HashSet<Tile> getKnownFree(Tile t){
-		HashSet<Tile> adjacent_tiles = new HashSet<Tile>(getAdjacentTiles(t));
-		if (t.config_list.size() == 0)
-			return adjacent_tiles;
-		else{
-			s = t.config_list.get(0);
-			for (HashSet<Tile> h : t.config_list){
-				s.addAll(h);
-			}
-		}
-		return adjacent_tiles.removeAll(s);
 	}
 
 	public void display(){

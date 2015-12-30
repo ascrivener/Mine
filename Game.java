@@ -31,7 +31,7 @@ public class Game{
 
 	public void propogate_flips(Tile tile){
 		if (tile.adjacent_bomb_count==0){
-			for (Tile t : board.getAdjacentTiles(tile)){
+			for (Tile t : tile.adjacency_list){
 				if (!t.isFlipped){
 					flip(t);
 					propogate_flips(t);

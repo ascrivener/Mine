@@ -6,12 +6,14 @@ public class Tile{
 	public int adjacent_bomb_count;
 	public Location location;
 	public ArrayList<HashSet<Tile>> config_list;
+	public ArrayList<Tile> adjacency_list;
 
-	public Tile(boolean isBomb,boolean isFlipped,int adjacent_bomb_count, Location location){
+	public Tile(boolean isBomb,boolean isFlipped,int adjacent_bomb_count, Location location, ArrayList<Tile> adjacency_list){
 		this.isBomb = isBomb;
 		this.isFlipped = isFlipped;
 		this.adjacent_bomb_count = adjacent_bomb_count;
 		this.location = location;
+		this.adjacency_list = adjacency_list;
 		config_list = new ArrayList<HashSet<Tile>>();
 
 	}
@@ -45,5 +47,33 @@ public class Tile{
 		append(location.row,rhs.location.row).
 		append(location.col,rhs.location.col).
 		isEquals();
+	}
+
+	public HashSet<Tile> getKnownBombs(){
+		HashSet<Tile> s = new HashSet<Tile>();
+		if (config_list.size() == 0)
+			return s;
+		else{
+			s = config_list.get(0);
+			for (HashSet<Tile> h : config_list){
+				s.retainAll(h);
+			}
+		}
+		return s;
+	}
+
+	public HashSet<Tile> getKnownFree(){
+		HashSet<Tile> s = new HashSet<Tile>();
+		HashSet<Tile> adjacent_tiles = new HashSet<Tile>(adjacency_list);
+		if (config_list.size() == 0)
+			return adjacent_tiles;
+		else{
+			s = config_list.get(0);
+			for (HashSet<Tile> h : config_list){
+				s.addAll(h);
+			}
+		}
+		adjacent_tiles.removeAll(s);
+		return adjacent_tiles;
 	}
 }
