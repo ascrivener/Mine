@@ -45,7 +45,7 @@ public class Game{
 	}
 
 	public void flip(Tile tile){
-		System.out.println("flipping " +  tile.location.row + " " + tile.location.col);
+		//System.out.println("flipping " +  tile.location.row + " " + tile.location.col);
 		if (!tile.isFlipped){
 			tile.isFlipped = true;
 			board.flipped_count++;
@@ -82,73 +82,46 @@ public class Game{
 			if (!t.isBomb){
 				if (t.isFlipped){
 					//go thru tile's configs, remove accordingly
-					for (int i = tile.config_list.size()-1; i>= 0; i--){
-						HashSet<Tile> h = new HashSet<Tile>(tile.config_list.get(i));
-						h.retainAll(t.adjacency_list);
-						if (h.size() > t.adjacent_bomb_count){
-							tile.config_list.remove(tile.config_list.get(i));
-						}
-
-
-						/**********************/
-						else{
-							if (!t.config_list.isEmpty()){
-								h = new HashSet<Tile>(tile.adjacency_list);
-								h.removeAll(tile.config_list.get(i));
-
-								boolean flag = false;
-								for (HashSet<Tile> h2 : t.config_list){
-									HashSet<Tile> h3 = new HashSet<Tile>(h);
-									h3.retainAll(h2);
-									if (h3.isEmpty()) //they do not intersect, so it is consistent.
-										flag = true;
-								}
-
-								if (!flag){ //intersected with every config
-									tile.config_list.remove(tile.config_list.get(i));
-								}
-							}
-						}
-					}
+					affect(t,tile);
 				}
 				//go thru t's configs, remove accordingly
-				for (int i = t.config_list.size()-1; i>= 0; i--){
-					HashSet<Tile> h = new HashSet<Tile>(t.config_list.get(i));
-					h.retainAll(tile.adjacency_list);
-					if (h.size() > tile.adjacent_bomb_count){
-						t.config_list.remove(t.config_list.get(i));
-					}
-
-					/********************/
-					else{
-						if (!tile.config_list.isEmpty()){
-							h = new HashSet<Tile>(t.adjacency_list);
-							h.removeAll(t.config_list.get(i));
-
-							boolean flag = false;
-
-							for (HashSet<Tile> h2 : tile.config_list){
-								HashSet<Tile> h3 = new HashSet<Tile>(h);
-								h3.retainAll(h2);
-								if (h3.isEmpty()) //they do not intersect, so it is consistent.
-									flag = true;
-							}
-
-							if (!flag){ //intersected with every config
-								t.config_list.remove(t.config_list.get(i));
-							}
-						}
-					}
-				}
+				affect(tile,t);
 				if (t.isFlipped)
 					updateBoardInfo(t);
 			}
 		}
 
-		//ALSO REMOVE A CONFIG IF 'the tiles not in the config intersects with each of the neighboring tile's configs'.
-
 		//necessary?
 		updateBoardInfo(tile);
+	}
+
+	public void affect(Tile tile1,Tile tile2){
+		for (int i = tile2.config_list.size()-1; i>= 0; i--){
+			HashSet<Tile> h = new HashSet<Tile>(tile2.config_list.get(i));
+			h.retainAll(tile1.adjacency_list);
+			if (h.size() > tile1.adjacent_bomb_count){
+				tile2.config_list.remove(tile2.config_list.get(i));
+			}
+
+			else{
+				if (!tile1.config_list.isEmpty()){
+					h = new HashSet<Tile>(tile2.adjacency_list);
+					h.removeAll(tile2.config_list.get(i));
+
+					boolean flag = false;
+					for (HashSet<Tile> h2 : tile1.config_list){
+						HashSet<Tile> h3 = new HashSet<Tile>(h);
+						h3.retainAll(h2);
+						if (h3.isEmpty()) //they do not intersect, so it is consistent.
+							flag = true;
+					}
+
+					if (!flag){ //intersected with every config
+						tile2.config_list.remove(tile2.config_list.get(i));
+					}
+				}
+			}
+		}
 	}
 
 	//bad name
