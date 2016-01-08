@@ -7,6 +7,10 @@ public class Location{
 		this.col = col;
 	}
 
+	public String toString(){
+		return "location: " + this.row + " " + this.col;
+	}
+
 	public boolean inBounds(int board_size){
 		int row = this.row;
 		int col = this.col;

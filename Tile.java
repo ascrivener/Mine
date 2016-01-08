@@ -25,7 +25,16 @@ public class Tile{
 	}
 
 	public String toString(){
-		return location.row + " " + location.col + "\n";
+		System.out.println(location.row + " " + location.col + "\n");
+		System.out.println("known free");
+		for (Tile t : getKnownFree()){
+			System.out.println(t.location.row + " " + t.location.col);
+		}
+		System.out.println("known bomb");
+		for (Tile t : getKnownBombs()){
+			System.out.println(t.location.row + " " + t.location.col);
+		}
+		return "";
 	}
 
 	@Override
