@@ -25,15 +25,22 @@ public class Tile{
 	}
 
 	public String toString(){
-		System.out.println(location.row + " " + location.col + "\n");
-		System.out.println("known free");
-		for (Tile t : getKnownFree()){
-			System.out.println(t.location.row + " " + t.location.col);
+		System.out.println("location: " + location);
+		for (HashSet<Tile> h : config_list){
+			System.out.println("config");
+			for (Tile t : h){
+				System.out.println(t.location);
+			}
+			System.out.println();
 		}
-		System.out.println("known bomb");
-		for (Tile t : getKnownBombs()){
-			System.out.println(t.location.row + " " + t.location.col);
-		}
+		// System.out.println("known free");
+		// for (Tile t : getKnownFree()){
+		// 	System.out.println(t.location.row + " " + t.location.col);
+		// }
+		// System.out.println("known bomb");
+		// for (Tile t : getKnownBombs()){
+		// 	System.out.println(t.location.row + " " + t.location.col);
+		// }
 		return "";
 	}
 

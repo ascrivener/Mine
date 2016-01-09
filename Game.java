@@ -45,15 +45,15 @@ public class Game{
 	}
 
 	public void flip(Tile tile){
-		//System.out.println("flipping " +  tile.location.row + " " + tile.location.col);
+		System.out.println("flipping " +  tile.location);
 		if (!tile.isFlipped){
 			tile.isFlipped = true;
 			board.flipped_count++;
 
 			//remove configs that contradict, i.e. two bombs next to a 1
 
-			removeConfigs(tile);
-
+			
+			//removeConfigs(tile);
 
 			
 			if (!tile.knownFree){
@@ -63,6 +63,8 @@ public class Game{
 			}
 
 			updateBoardInfo(tile);
+
+			removeConfigs(tile);
 		}
 	}
 
@@ -99,26 +101,25 @@ public class Game{
 		for (int i = tile2.config_list.size()-1; i>= 0; i--){
 			HashSet<Tile> h = new HashSet<Tile>(tile2.config_list.get(i));
 			h.retainAll(tile1.adjacency_list);
-			if (h.size() > tile1.adjacent_bomb_count){
+			h.addAll(tile1.getKnownBombs());
+			if (h.size() > tile1.adjacent_bomb_count){ //wrong. if the size of the union of h and tile1.getKnownBombs() > tile1.adjacent_bomb_count.
 				tile2.config_list.remove(tile2.config_list.get(i));
 			}
 
-			else{
-				if (!tile1.config_list.isEmpty()){
-					h = new HashSet<Tile>(tile2.adjacency_list);
-					h.removeAll(tile2.config_list.get(i));
+			else if (!tile1.config_list.isEmpty()){
+				h = new HashSet<Tile>(tile2.adjacency_list);
+				h.removeAll(tile2.config_list.get(i));
 
-					boolean flag = false;
-					for (HashSet<Tile> h2 : tile1.config_list){
-						HashSet<Tile> h3 = new HashSet<Tile>(h);
-						h3.retainAll(h2);
-						if (h3.isEmpty()) //they do not intersect, so it is consistent.
-							flag = true;
-					}
+				boolean flag = false;
+				for (HashSet<Tile> h2 : tile1.config_list){
+					HashSet<Tile> h3 = new HashSet<Tile>(h);
+					h3.retainAll(h2);
+					if (h3.isEmpty()) //they do not intersect, so it is consistent.
+						flag = true;
+				}
 
-					if (!flag){ //intersected with every config
-						tile2.config_list.remove(tile2.config_list.get(i));
-					}
+				if (!flag){ //intersected with every config
+					tile2.config_list.remove(tile2.config_list.get(i));
 				}
 			}
 		}

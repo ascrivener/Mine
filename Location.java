@@ -8,7 +8,7 @@ public class Location{
 	}
 
 	public String toString(){
-		return "location: " + this.row + " " + this.col;
+		return this.row + " " + this.col;
 	}
 
 	public boolean inBounds(int board_size){

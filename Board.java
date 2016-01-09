@@ -24,6 +24,14 @@ public class Board{
 				tiles[row][col].isBomb = true;
 				bomb_count--;
 			}
+
+			// tiles[2][0].isBomb = true;
+			// tiles[3][0].isBomb = true;
+			// tiles[1][4].isBomb = true;
+			// tiles[2][4].isBomb = true;
+			// tiles[4][1].isBomb = true;
+			// tiles[4][3].isBomb = true;
+			// bomb_count = 0;
 		}
 		
 		for (int i = 0; i < board_size; i++){
